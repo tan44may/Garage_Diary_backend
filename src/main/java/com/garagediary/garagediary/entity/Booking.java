@@ -2,6 +2,7 @@ package com.garagediary.garagediary.entity;
 
 import com.garagediary.garagediary.entity.enums.Status;
 import jakarta.persistence.*;
+import com.garagediary.garagediary.entity.ServiceCenter;
 
 import java.util.UUID;
 
