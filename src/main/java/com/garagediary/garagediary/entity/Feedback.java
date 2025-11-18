@@ -20,7 +20,7 @@ public class Feedback {
 
     
     @Column(nullable = false)
-    private int rating; // rating = 1 to 5
+    private int rating;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
@@ -30,8 +30,4 @@ public class Feedback {
     @JoinColumn(name = "service_center_id", nullable = false)
     private ServiceCenter serviceCenter;
 
-    @PrePersist
-    public void onCreate() {
-        this.feedbackDate = LocalDate.now();
-    }
 }
