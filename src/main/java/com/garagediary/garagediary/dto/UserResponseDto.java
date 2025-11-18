@@ -13,12 +13,12 @@ import java.util.UUID;
 @Data
 @Builder
 public class UserResponseDto {
-    private UUID user_id;
-    private String email;
-    private String name;
-    private String password;
-    private int phone;
-    private Role role;
-    private List<Vehicle> vehicles;
-    private List<Booking> bookings;
+        private UUID user_id;
+        private String email;
+        private String name;
+        private String password;
+        private int phone;
+        private Role role;
+        private List<Vehicle> vehicles;
+        private List<Booking> bookings;
 }

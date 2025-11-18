@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    UserResponseDto addUser(UserRequestDto requestDto);
-    UserResponseDto getUserById(UUID userId);
-    UserResponseDto updateUser(UUID userId);
-    UserResponseDto removeUser(UUID userId);
-    UserResponseDto addNewVehicle(Vehicle vehicle);
-    UserResponseDto removeVehicle(UUID vehicleId);
-    List<BookingResponseDto> getAllBookings();
-    BookingResponseDto getBookingById(UUID bookingId);
+     UserResponseDto addUser(UserRequestDto requestDto);
+     BookingResponseDto getBookingById(UUID bookingId);
+     UserResponseDto getUserById(UUID userId);
+     UserResponseDto updateUser(UUID userId);
+     UserResponseDto removeUser(UUID userId);
+     UserResponseDto addNewVehicle(Vehicle vehicle);
+     UserResponseDto removeVehicle(UUID vehicleId);
+     List<BookingResponseDto> getAllBookings();
 }
