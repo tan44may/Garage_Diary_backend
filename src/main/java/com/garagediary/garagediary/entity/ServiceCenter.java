@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.UUID;
 import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.entity.Booking;
-import com.garagediary.garagediary.entity.enums.ActivePlan;
-
-
 
 @Entity
 @Data
@@ -47,4 +44,16 @@ public class ServiceCenter {
 
     private LocalTime startTime;
     private LocalTime endTime;
+
+    private float averageRating = 0.0;
+
+    
+    private String profileUrl;         // Profile image of service center
+    private String coverImgUrl;        // Cover/banner image
+
+    @ElementCollection
+    private List<String> gallery;      // List of image URLs
+
+    @ElementCollection
+    private List<String> socialMedia;  // Social media account URLs
 }

@@ -11,7 +11,7 @@ public class Booking {
     @Id
     @GeneratedValue
     private UUID booking_id;
-
+ 
     @Enumerated(EnumType.STRING)
     private Status status;
 

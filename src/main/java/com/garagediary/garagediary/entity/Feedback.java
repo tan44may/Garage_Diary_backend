@@ -18,6 +18,10 @@ public class Feedback {
 
     private LocalDate feedbackDate;
 
+    
+    @Column(nullable = false)
+    private int rating; // rating = 1 to 5
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;
@@ -25,4 +29,9 @@ public class Feedback {
     @ManyToOne
     @JoinColumn(name = "service_center_id", nullable = false)
     private ServiceCenter serviceCenter;
+
+    @PrePersist
+    public void onCreate() {
+        this.feedbackDate = LocalDate.now();
+    }
 }
