@@ -1,0 +1,42 @@
+package com.garagediary.garagediary.dto;
+
+import com.garagediary.garagediary.entity.enums.ActivePlan;
+import lombok.Builder;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.UUID;
+
+@Data
+@Builder
+public class ServiceCenterResponseDto {
+
+    private UUID id;
+
+    private String garageName;
+    private double latitude;
+    private double longitude;
+    private String phone;
+
+    private UUID ownerId;
+
+    private ActivePlan activePlan;
+    private LocalDate planStartedDate;
+    private LocalDate planEndDate;
+
+    private List<String> availableDays;
+    private LocalTime startTime;
+    private LocalTime endTime;
+
+    private float averageRating;
+
+    private String profileUrl;
+    private String coverImgUrl;
+    private List<String> gallery;
+    private List<String> socialMedia;
+
+    private int totalServices;
+    private int totalBookings;
+}

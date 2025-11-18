@@ -45,15 +45,15 @@ public class ServiceCenter {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    private float averageRating = 0.0;
+    private float averageRating;
 
     
-    private String profileUrl;         // Profile image of service center
-    private String coverImgUrl;        // Cover/banner image
+    private String profileUrl;         
+    private String coverImgUrl;        
 
     @ElementCollection
-    private List<String> gallery;      // List of image URLs
+    private List<String> gallery;      
 
     @ElementCollection
-    private List<String> socialMedia;  // Social media account URLs
+    private List<String> socialMedia;  
 }
