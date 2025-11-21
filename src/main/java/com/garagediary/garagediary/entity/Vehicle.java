@@ -2,10 +2,12 @@ package com.garagediary.garagediary.entity;
 
 import com.garagediary.garagediary.entity.enums.Vehicle_Type;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.UUID;
 
 @Entity
+@Builder
 public class Vehicle {
     @Id
     @GeneratedValue

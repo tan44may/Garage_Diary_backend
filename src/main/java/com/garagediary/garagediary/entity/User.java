@@ -2,12 +2,18 @@ package com.garagediary.garagediary.entity;
 
 import com.garagediary.garagediary.entity.enums.Role;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "Users")
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
