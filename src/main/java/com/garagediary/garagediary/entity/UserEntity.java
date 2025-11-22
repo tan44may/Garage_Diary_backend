@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue
@@ -25,7 +25,7 @@ public class User {
 
     private String name;
     private String password;
-    private int phone;
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     private Role role;

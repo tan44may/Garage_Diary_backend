@@ -24,7 +24,7 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private User customer;
+    private UserEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "service_center_id", nullable = false)
