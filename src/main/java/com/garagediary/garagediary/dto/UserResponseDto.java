@@ -15,8 +15,8 @@ public class UserResponseDto {
         private UUID user_id;
         private String email;
         private String name;
-        private int phone;
+        private String phone;
         private Role role;
-        private List<Vehicle> vehicles;
+        private List<VehicleResponseDto> vehicles;
         private List<Booking> bookings;
 }

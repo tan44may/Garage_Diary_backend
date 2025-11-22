@@ -1,53 +1,73 @@
-package com.garagediary.garagediary.service.Impl;
+package com.garagediary.garagediary.service.impl;
 
-import com.garagediary.garagediary.dto.BookingResponseDto;
-import com.garagediary.garagediary.dto.UserRequestDto;
-import com.garagediary.garagediary.dto.UserResponseDto;
-import com.garagediary.garagediary.dto.VehicleRequestDto;
-import com.garagediary.garagediary.entity.User;
+import com.garagediary.garagediary.Repository.VehicleRepository;
+import com.garagediary.garagediary.dto.*;
+import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.entity.Vehicle;
 import com.garagediary.garagediary.entity.enums.Role;
-import com.garagediary.garagediary.repository.UserRepository;
+import com.garagediary.garagediary.Repository.UserRepository;
+import com.garagediary.garagediary.service.AuthenticationService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
+    private final PasswordEncoder passwordEncoder;
+    private final VehicleRepository vehicleRepository;
 
-    private User convertToEntity(UserRequestDto requestDto)
+
+    private UserEntity convertToEntity(UserRequestDto requestDto)
     {
-        return User.builder()
+        return UserEntity.builder()
                 .phone(requestDto.getPhone())
                 .email(requestDto.getEmail())
                 .name(requestDto.getName())
-                //TODO adding encoded password after implementing spring security
-                .password(requestDto.getPassword())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
     }
-    private UserResponseDto convertToResponse(User newUser)
-    {
+    private VehicleResponseDto convertVehicleToDto(Vehicle vehicle) {
+        return VehicleResponseDto.builder()
+                .vehicle_id(vehicle.getVehicle_id())
+                .vehicle_number(vehicle.getVehicle_number())
+                .brand(vehicle.getBrand())
+                .fuel_type(vehicle.getFuel_type())
+                .model(vehicle.getModel())
+                .type(vehicle.getType())
+                .build();
+    }
+    private UserResponseDto convertToResponse(UserEntity newUser) {
+        List<VehicleResponseDto> vehicleDtos = newUser.getVehicles() == null ? List.of() :
+                newUser.getVehicles().stream()
+                        .map(this::convertVehicleToDto)
+                        .collect(Collectors.toList());
+
         return UserResponseDto.builder()
                 .user_id(newUser.getUser_id())
                 .phone(newUser.getPhone())
                 .role(newUser.getRole())
                 .email(newUser.getEmail())
                 .name(newUser.getName())
-                .vehicles(newUser.getVehicles())
+                .vehicles(vehicleDtos)
                 .bookings(newUser.getBookings())
                 .build();
     }
     @Override
     public UserResponseDto addUser(UserRequestDto requestDto) {
 
-        User newUser = new User();
+        UserEntity newUser = new UserEntity();
         newUser = convertToEntity(requestDto);
         newUser.setRole(Role.CUSTOMER);
         newUser = userRepository.save(newUser);
@@ -62,20 +82,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserById(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Unable to find user "));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Unable to find user "));
         return convertToResponse(user);
     }
 
     @Override
     public UserResponseDto updateUser(UUID id, UserRequestDto userRequestDto) {
-        User user = userRepository.findById(id)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
         user.setName(userRequestDto.getName());
         user.setEmail(userRequestDto.getEmail());
         user.setPhone(userRequestDto.getPhone());
 
-        User updatedUser = userRepository.save(user);
+        UserEntity updatedUser = userRepository.save(user);
 
         return convertToResponse(updatedUser);
     }
@@ -83,7 +103,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto removeUser(UUID userId) {
 
-        User deletedUser = userRepository.findById(userId)
+        UserEntity deletedUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
                 userRepository.deleteById(userId);
         return convertToResponse(deletedUser);
@@ -91,6 +111,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto addNewVehicle(VehicleRequestDto vehicleRequestDto) {
+        UUID id = findCurrentUser();
+        UserEntity currentUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
 
         Vehicle newVehicle = Vehicle.builder()
                 .vehicle_number(vehicleRequestDto.getVehicle_number())
@@ -98,12 +120,21 @@ public class UserServiceImpl implements UserService {
                 .type(vehicleRequestDto.getType())
                 .model(vehicleRequestDto.getModel())
                 .fuel_type(vehicleRequestDto.getFuel_type())
-                //TODO adding current logged in user after implementing spring security
-                .user(vehicleRequestDto.getUser())
+                .user(currentUser)
                 .build();
 
-        return null;
+        newVehicle = vehicleRepository.save(newVehicle);
+
+        if (currentUser.getVehicles() == null) {
+            currentUser.setVehicles(new ArrayList<>());
+        }
+
+        currentUser.getVehicles().add(newVehicle);
+        userRepository.save(currentUser);
+
+        return convertToResponse(currentUser);
     }
+
 
     @Override
     public UserResponseDto removeVehicle(UUID vehicleId) {
@@ -113,5 +144,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<BookingResponseDto> getAllBookings() {
         return List.of();
+    }
+
+    @Override
+    public UUID findCurrentUser() {
+        String loggedInUserEmail =  authenticationService.getAuthentication().getName();
+        UserEntity user = userRepository.findByEmail(loggedInUserEmail).orElseThrow(()-> new UsernameNotFoundException("User name not found"));
+        return user.getUser_id();
     }
 }

@@ -2,9 +2,8 @@ package com.garagediary.garagediary.dto;
 
 import com.garagediary.garagediary.entity.Bill;
 import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.entity.User;
+import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.entity.enums.Status;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +15,7 @@ public class BookingResponseDto {
 
         private Status status;
 
-        private User customer;
+        private UserEntity customer;
 
         private ServiceCenter serviceCenter;
         private String vehicle_id;

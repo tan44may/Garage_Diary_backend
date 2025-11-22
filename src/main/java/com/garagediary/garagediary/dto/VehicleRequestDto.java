@@ -1,6 +1,6 @@
 package com.garagediary.garagediary.dto;
 
-import com.garagediary.garagediary.entity.User;
+import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.entity.enums.Vehicle_Type;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +13,4 @@ public class VehicleRequestDto {
     private String fuel_type;
     private String model;
     private Vehicle_Type type;
-    private User user;
 }

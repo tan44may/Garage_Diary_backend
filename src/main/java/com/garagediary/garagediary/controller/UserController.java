@@ -1,7 +1,8 @@
-package com.garagediary.garagediary.controller;
+package com.garagediary.garagediary.Controller;
 
 import com.garagediary.garagediary.dto.UserRequestDto;
 import com.garagediary.garagediary.dto.UserResponseDto;
+import com.garagediary.garagediary.dto.VehicleRequestDto;
 import com.garagediary.garagediary.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,12 @@ public class UserController {
     ResponseEntity<UserResponseDto> deleteUserById(@PathVariable UUID id)
     {
         return new ResponseEntity<>(userService.removeUser(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/addVehicle")
+    public ResponseEntity<UserResponseDto> addVehicle(@RequestBody VehicleRequestDto requestDto)
+    {
+        return ResponseEntity.ok(userService.addNewVehicle(requestDto));
     }
 
 }
