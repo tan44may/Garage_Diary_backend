@@ -1,4 +1,4 @@
-package com.garagediary.garagediary.controller;
+package com.garagediary.garagediary.Controller;
 
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;

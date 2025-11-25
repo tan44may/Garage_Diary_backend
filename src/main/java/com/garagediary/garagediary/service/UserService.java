@@ -18,4 +18,5 @@ public interface UserService {
      UserResponseDto addNewVehicle(VehicleRequestDto vehicleRequestDto);
      UserResponseDto removeVehicle(UUID vehicleId);
      List<BookingResponseDto> getAllBookings();
+     UUID findCurrentUser();
 }

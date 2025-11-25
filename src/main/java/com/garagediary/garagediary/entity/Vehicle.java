@@ -2,12 +2,18 @@ package com.garagediary.garagediary.entity;
 
 import com.garagediary.garagediary.entity.enums.Vehicle_Type;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Vehicle {
     @Id
     @GeneratedValue
@@ -22,7 +28,7 @@ public class Vehicle {
 
     @JoinColumn(name = "user_id")
     @ManyToOne
-    private User user;
+    private UserEntity user;
     @Enumerated(EnumType.STRING)
     private Vehicle_Type type;
 }
