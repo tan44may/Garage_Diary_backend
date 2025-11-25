@@ -1,9 +1,6 @@
 package com.garagediary.garagediary.Controller;
 
-import com.garagediary.garagediary.dto.LoginDto;
-import com.garagediary.garagediary.dto.LoginResponseDto;
-import com.garagediary.garagediary.dto.UserRequestDto;
-import com.garagediary.garagediary.dto.UserResponseDto;
+import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.service.AuthenticationService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.AllArgsConstructor;
@@ -29,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto requestDto)
+    ResponseEntity<RegisterResponseDto> addUser(@RequestBody UserRequestDto requestDto)
     {
         return new ResponseEntity<>(userService.addUser(requestDto), HttpStatus.OK);
     }
