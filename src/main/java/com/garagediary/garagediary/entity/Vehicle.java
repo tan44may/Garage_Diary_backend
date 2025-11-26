@@ -2,10 +2,7 @@ package com.garagediary.garagediary.entity;
 
 import com.garagediary.garagediary.entity.enums.Vehicle_Type;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -13,7 +10,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Vehicle {
     @Id
     @GeneratedValue

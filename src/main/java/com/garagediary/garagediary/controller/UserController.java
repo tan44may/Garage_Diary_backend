@@ -1,5 +1,6 @@
 package com.garagediary.garagediary.Controller;
 
+import com.garagediary.garagediary.dto.RegisterResponseDto;
 import com.garagediary.garagediary.dto.UserRequestDto;
 import com.garagediary.garagediary.dto.UserResponseDto;
 import com.garagediary.garagediary.dto.VehicleRequestDto;
@@ -19,11 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
-    ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto requestDto)
-    {
-        return new ResponseEntity<>(userService.addUser(requestDto), HttpStatus.OK);
-    }
+//    @PostMapping("/create")
+//    ResponseEntity<RegisterResponseDto> addUser(@RequestBody UserRequestDto requestDto)
+//    {
+//        return new ResponseEntity<>(userService.addUser(requestDto), HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id)
@@ -48,5 +49,10 @@ public class UserController {
         return ResponseEntity.ok(userService.addNewVehicle(requestDto));
     }
 
+    @DeleteMapping("/removeVehicle/{id}")
+    ResponseEntity<UserResponseDto> removeVehicle(@PathVariable UUID id)
+    {
+        return new ResponseEntity<>(userService.removeVehicle(id), HttpStatus.OK);
+    }
 }
 
