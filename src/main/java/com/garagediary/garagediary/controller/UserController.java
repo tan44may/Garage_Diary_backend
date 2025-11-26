@@ -1,6 +1,5 @@
 package com.garagediary.garagediary.Controller;
 
-import com.garagediary.garagediary.dto.RegisterResponseDto;
 import com.garagediary.garagediary.dto.UserRequestDto;
 import com.garagediary.garagediary.dto.UserResponseDto;
 import com.garagediary.garagediary.dto.VehicleRequestDto;
@@ -19,12 +18,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-//    @PostMapping("/create")
-//    ResponseEntity<RegisterResponseDto> addUser(@RequestBody UserRequestDto requestDto)
-//    {
-//        return new ResponseEntity<>(userService.addUser(requestDto), HttpStatus.OK);
-//    }
 
     @GetMapping("/{id}")
     ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id)

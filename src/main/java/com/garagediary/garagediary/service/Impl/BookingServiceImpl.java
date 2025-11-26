@@ -12,6 +12,7 @@ import com.garagediary.garagediary.entity.enums.Status;
 import com.garagediary.garagediary.service.BookingService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ServiceCenterRepository serviceCenterRepository;
     private final BookingRepository bookingRepository;
+    private  ModelMapper modelMapper;
 
     @Override
     public BookingResponseDto createBooking(BookingRequestDto bookingRequestDto) {
@@ -105,26 +107,40 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDto getBookingDetails(UUID bookingId) {
-        return null;
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        return convertToResponse(booking);
     }
 
     @Override
-    public BookingResponseDto updateBookingStatus(UUID bookingId) {
-        return null;
+    public BookingResponseDto updateBookingStatus(UUID bookingId,Status status) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        booking.setStatus(status);
+        booking = bookingRepository.save(booking);
+        return convertToResponse(booking);
     }
 
     @Override
     public BookingResponseDto cancelBooking(UUID bookingId) {
-        return null;
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        booking.setStatus(Status.CANCELLED);
+        booking = bookingRepository.save(booking);
+        return convertToResponse(booking);
     }
 
     @Override
     public List<BookingResponseDto> getAllBookingsByUser(UUID userId) {
-        return List.of();
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        List<Booking> list = user.getBookings();
+
+        List<BookingResponseDto> bList = list.stream()
+                .map(this::convertToResponse)  // use your custom converter to avoid recursion
+                .toList();
+
+        return bList;
     }
 
-    @Override
-    public BookingResponseDto getBookingById(UUID bookingId) {
-        return null;
-    }
+
+
 }
