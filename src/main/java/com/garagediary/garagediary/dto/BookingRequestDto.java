@@ -4,13 +4,13 @@ import com.garagediary.garagediary.entity.ServiceCenter;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 public class BookingRequestDto {
-        private ServiceCenter serviceCenter;
+        private UUID serviceCenter_id;
         private String vehicle_id;
-        private String brand;
-        private String fuel;
-        private int mobile_number;
+        private String mobile_number;
         private String name;
 }

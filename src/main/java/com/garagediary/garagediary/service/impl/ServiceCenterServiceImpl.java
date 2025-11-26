@@ -1,20 +1,23 @@
 package com.garagediary.garagediary.service.impl;
 
+import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.repository.ServiceCenterRepository;
+import com.garagediary.garagediary.Repository.ServiceCenterRepository;
 import com.garagediary.garagediary.service.ServiceCenterService;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     private final ServiceCenterRepository serviceCenterRepository;
@@ -95,6 +98,16 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         // Agar tumne feedback system add kiya hoga to yaha average calculate hoga
         // Filhal calculate nahi kar rahe, direct return kar dete:
         return (double) sc.getAverageRating();
+    }
+
+    @Override
+    public ServiceCenterResponseDto updateAvailability(AvailabilityRequest request,UUID id) {
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Service center not found"));
+        center.setAvailableDays(request.getAvailableDays());
+        center.setEndTime(request.getEndTime());
+        center.setStartTime(request.getStartTime());
+        center = serviceCenterRepository.save(center);
+        return mapEntityToResponse(center);
     }
 
     // -------------------------------------------------------------------

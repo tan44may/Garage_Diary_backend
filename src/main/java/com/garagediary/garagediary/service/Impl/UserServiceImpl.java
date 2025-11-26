@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
                 .type(vehicle.getType())
                 .build();
     }
-    private UserResponseDto convertToResponse(UserEntity newUser) {
+    public UserResponseDto convertToResponse(UserEntity newUser) {
         List<VehicleResponseDto> vehicleDtos = newUser.getVehicles() == null ? List.of() :
                 newUser.getVehicles().stream()
                         .map(this::convertVehicleToDto)

@@ -1,5 +1,6 @@
 package com.garagediary.garagediary.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.garagediary.garagediary.entity.enums.Vehicle_Type;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,7 @@ public class Vehicle {
 
     @JoinColumn(name = "user_id")
     @ManyToOne
+    @JsonBackReference
     private UserEntity user;
     @Enumerated(EnumType.STRING)
     private Vehicle_Type type;

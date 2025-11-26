@@ -1,5 +1,6 @@
 package com.garagediary.garagediary.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.garagediary.garagediary.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,9 +32,11 @@ public class UserEntity {
     private Role role;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Vehicle> vehicles;
 
     
