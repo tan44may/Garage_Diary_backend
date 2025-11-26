@@ -3,9 +3,10 @@ package com.garagediary.garagediary.service.impl;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.repository.ServiceCenterRepository;
+import com.garagediary.garagediary.Repository.ServiceCenterRepository;
 import com.garagediary.garagediary.service.ServiceCenterService;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     private final ServiceCenterRepository serviceCenterRepository;
