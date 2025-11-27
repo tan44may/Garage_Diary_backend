@@ -32,10 +32,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponseDto login(LoginDto request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         final UserDetails userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
         final String jwtToken = jwtUtils.generateToken(userDetails);
-        UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new NoSuchElementException("User not found"));
-        return new LoginResponseDto(user.getUser_id(), user.getName(), user.getEmail(), jwtToken);
+        UserEntity user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        return new LoginResponseDto(
+                user.getUser_id(),
+                user.getName(),
+                user.getEmail(),
+                jwtToken,
+                user.getRole().name());
+
     }
 }
