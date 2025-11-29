@@ -16,4 +16,5 @@ public interface UserService {
      UserResponseDto removeVehicle(UUID vehicleId);
      List<BookingResponseDto> getAllBookings();
      UUID findCurrentUser();
+     UserResponseDto findByEmail(String email);
 }

@@ -55,5 +55,7 @@ public class ServiceCenter {
     private List<String> gallery;      
 
     @ElementCollection
-    private List<String> socialMedia;  
+    private List<String> socialMedia;
+
+    private List<String> documents;
 }

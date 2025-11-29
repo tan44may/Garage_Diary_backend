@@ -10,6 +10,5 @@ import java.util.UUID;
 public class FeedbackRequestDto {
     private String comment;
     private int rating;
-    private UUID customerId;
     private UUID serviceCenterId;
 }

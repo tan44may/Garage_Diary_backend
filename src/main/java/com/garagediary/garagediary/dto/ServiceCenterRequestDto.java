@@ -16,7 +16,7 @@ public class ServiceCenterRequestDto {
     private double longitude;
     private String phone;
 
-    private UUID ownerId;
+    private String email;
 
     private List<String> availableDays;
     private LocalTime startTime;
@@ -26,4 +26,5 @@ public class ServiceCenterRequestDto {
     private String coverImgUrl;
     private List<String> gallery;
     private List<String> socialMedia;
+    private List<String> documents;
 }

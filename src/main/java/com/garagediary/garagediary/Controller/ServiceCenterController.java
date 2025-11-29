@@ -3,9 +3,12 @@ package com.garagediary.garagediary.Controller;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
+import com.garagediary.garagediary.dto.UserResponseDto;
 import com.garagediary.garagediary.service.ServiceCenterService;
 
+import com.garagediary.garagediary.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class ServiceCenterController {
 
     private final ServiceCenterService serviceCenterService;
+    private final UserService userService;
 
     // ----------------- CREATE -----------------
     @PostMapping
@@ -66,6 +70,12 @@ public class ServiceCenterController {
 
         List<ServiceCenterResponseDto> response = serviceCenterService.getServiceCentersByOwner(ownerId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/email/{email}")
+    ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email)
+    {
+        return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
     @PutMapping("update/{id}")
