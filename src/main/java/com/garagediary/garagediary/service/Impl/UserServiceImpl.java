@@ -2,6 +2,8 @@ package com.garagediary.garagediary.service.impl;
 
 import com.garagediary.garagediary.Repository.VehicleRepository;
 import com.garagediary.garagediary.dto.*;
+import com.garagediary.garagediary.entity.Booking;
+import com.garagediary.garagediary.entity.ServiceCenter;
 import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.entity.Vehicle;
 import com.garagediary.garagediary.entity.enums.Role;
@@ -40,8 +42,6 @@ public class UserServiceImpl implements UserService {
 
         final UserDetails userDetails = appUserDetailsService.loadUserByUsername(requestDto.getEmail());
         final String jwtToken = jwtUtils.generateToken(userDetails);
-
-
 
         return new RegisterResponseDto(newUser.getUser_id(),newUser.getEmail(),newUser.getName(),newUser.getPhone(),newUser.getRole(),jwtToken);
     }
@@ -166,10 +166,17 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
     public UserResponseDto convertToResponse(UserEntity newUser) {
-        List<VehicleResponseDto> vehicleDtos = newUser.getVehicles() == null ? List.of() :
-                newUser.getVehicles().stream()
-                        .map(this::convertVehicleToDto)
-                        .collect(Collectors.toList());
+        List<VehicleResponseDto> vehicleDtos =
+                newUser.getVehicles() == null ? List.of() :
+                        newUser.getVehicles().stream()
+                                .map(this::convertVehicleToDto)
+                                .toList();
+
+        List<BookingResponseDto> bookingDtos =
+                newUser.getBookings() == null ? List.of() :
+                        newUser.getBookings().stream()
+                                .map(this::convertBookingToDto)
+                                .toList();
 
         return UserResponseDto.builder()
                 .user_id(newUser.getUser_id())
@@ -178,7 +185,45 @@ public class UserServiceImpl implements UserService {
                 .email(newUser.getEmail())
                 .name(newUser.getName())
                 .vehicles(vehicleDtos)
-                .bookings(newUser.getBookings())
+                .bookings(bookingDtos)
                 .build();
     }
+    private BookingResponseDto convertBookingToDto(Booking booking) {
+        UserDto customerDto = UserDto.builder()
+                .user_id(booking.getCustomer().getUser_id())
+                .email(booking.getCustomer().getEmail())
+                .name(booking.getCustomer().getName())
+                .build();
+
+        return BookingResponseDto.builder()
+                .booking_id(booking.getBooking_id())
+                .status(booking.getStatus())
+                .customer(customerDto)
+                .serviceCenter(convertServiceCenterToDto(booking.getServiceCenter()))
+                .vehicle(convertVehicleToDTO(booking.getVehicle()))
+                .mobile_number(booking.getMobile_number())
+                .name(booking.getName())
+                .build();
+    }
+    private ServiceCenterDto convertServiceCenterToDto(ServiceCenter sc) {
+        if (sc == null) return null;
+
+        return ServiceCenterDto.builder()
+                .id(sc.getId())
+                .garageName(sc.getGarageName())
+                .phone(sc.getPhone())
+                .build();
+    }
+    private VehicleDto convertVehicleToDTO(Vehicle v) {
+        if (v == null) return null;
+
+        return VehicleDto.builder()
+                .vehicle_id(v.getVehicle_id())
+                .vehicle_number(v.getVehicle_number())
+                .brand(v.getBrand())
+                .build();
+    }
+
+
+
 }
