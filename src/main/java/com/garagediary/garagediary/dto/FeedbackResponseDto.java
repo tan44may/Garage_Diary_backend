@@ -16,5 +16,5 @@ public class FeedbackResponseDto {
     private LocalDate feedbackDate;
 
     private UUID customerId;
-    private UUID serviceCenterId;
+    private ServiceCenterDto serviceCenter;
 }

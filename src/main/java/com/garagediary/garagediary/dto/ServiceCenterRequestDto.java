@@ -1,7 +1,6 @@
 package com.garagediary.garagediary.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -9,6 +8,10 @@ import java.util.UUID;
 
 @Data
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceCenterRequestDto {
 
     private String garageName;
@@ -16,7 +19,7 @@ public class ServiceCenterRequestDto {
     private double longitude;
     private String phone;
 
-    private UUID ownerId;
+    private String email;
 
     private List<String> availableDays;
     private LocalTime startTime;
@@ -26,4 +29,5 @@ public class ServiceCenterRequestDto {
     private String coverImgUrl;
     private List<String> gallery;
     private List<String> socialMedia;
+    private List<String> documents;
 }

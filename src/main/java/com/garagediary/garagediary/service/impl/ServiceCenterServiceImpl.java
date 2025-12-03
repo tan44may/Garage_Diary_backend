@@ -1,10 +1,12 @@
 package com.garagediary.garagediary.service.impl;
 
+import com.garagediary.garagediary.Repository.UserRepository;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
 import com.garagediary.garagediary.Repository.ServiceCenterRepository;
+import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.service.ServiceCenterService;
 
 import lombok.AllArgsConstructor;
@@ -21,12 +23,15 @@ import java.util.stream.Collectors;
 public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     private final ServiceCenterRepository serviceCenterRepository;
+    private final UserRepository userRepository;
 
     // ---------------- CREATE ---------------------
     @Override
     public ServiceCenterResponseDto createServiceCenter(ServiceCenterRequestDto dto) {
 
         ServiceCenter serviceCenter = new ServiceCenter();
+        UserEntity user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NoSuchElementException("User not found"));
+        serviceCenter.setOwnerId(user.getUser_id());
         mapDtoToEntity(dto, serviceCenter);
 
         ServiceCenter saved = serviceCenterRepository.save(serviceCenter);
@@ -119,7 +124,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         sc.setLatitude(dto.getLatitude());
         sc.setLongitude(dto.getLongitude());
         sc.setPhone(dto.getPhone());
-        sc.setOwnerId(dto.getOwnerId());
+        sc.setDocuments(dto.getDocuments());
         sc.setAvailableDays(dto.getAvailableDays());
         sc.setStartTime(dto.getStartTime());
         sc.setEndTime(dto.getEndTime());
@@ -141,6 +146,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .planStartedDate(sc.getPlanStartedDate())
                 .planEndDate(sc.getPlanEndDate())
                 .availableDays(sc.getAvailableDays())
+                .documents(sc.getDocuments())
                 .startTime(sc.getStartTime())
                 .endTime(sc.getEndTime())
                 .averageRating(sc.getAverageRating())

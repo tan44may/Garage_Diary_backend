@@ -25,6 +25,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/email/{email}")
+    ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email)
+    {
+        return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable UUID id, @RequestBody UserRequestDto userRequestDto) {
 

@@ -36,6 +36,7 @@ public class ServiceCenterResponseDto {
     private String coverImgUrl;
     private List<String> gallery;
     private List<String> socialMedia;
+    private List<String> documents;
 
     private int totalServices;
     private int totalBookings;

@@ -138,6 +138,13 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByEmail(loggedInUserEmail).orElseThrow(()-> new UsernameNotFoundException("User name not found"));
         return user.getUser_id();
     }
+
+    @Override
+    public UserResponseDto findByEmail(String email) {
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(()-> new NoSuchElementException("User not found"));
+        return convertToResponse(user);
+    }
+
     private UserEntity convertToEntity(UserRequestDto requestDto)
     {
         return UserEntity.builder()
