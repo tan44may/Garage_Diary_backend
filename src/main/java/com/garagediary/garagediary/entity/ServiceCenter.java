@@ -1,5 +1,6 @@
 package com.garagediary.garagediary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.garagediary.garagediary.entity.enums.ActivePlan;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +38,7 @@ public class ServiceCenter {
     private LocalDate planEndDate;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> bookings;
 
     @ElementCollection
@@ -58,4 +60,6 @@ public class ServiceCenter {
     private List<String> socialMedia;
 
     private List<String> documents;
+
+    private String plan;
 }

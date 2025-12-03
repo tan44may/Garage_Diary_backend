@@ -18,5 +18,5 @@ public class UserResponseDto {
         private String phone;
         private Role role;
         private List<VehicleResponseDto> vehicles;
-        private List<Booking> bookings;
+        private List<BookingResponseDto> bookings;
 }
