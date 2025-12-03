@@ -124,6 +124,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         sc.setLatitude(dto.getLatitude());
         sc.setLongitude(dto.getLongitude());
         sc.setPhone(dto.getPhone());
+        sc.setDocuments(dto.getDocuments());
         sc.setAvailableDays(dto.getAvailableDays());
         sc.setStartTime(dto.getStartTime());
         sc.setEndTime(dto.getEndTime());
@@ -145,6 +146,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .planStartedDate(sc.getPlanStartedDate())
                 .planEndDate(sc.getPlanEndDate())
                 .availableDays(sc.getAvailableDays())
+                .documents(sc.getDocuments())
                 .startTime(sc.getStartTime())
                 .endTime(sc.getEndTime())
                 .averageRating(sc.getAverageRating())
