@@ -16,5 +16,8 @@ public interface UserService {
      UserResponseDto removeVehicle(UUID vehicleId);
      List<BookingResponseDto> getAllBookings();
      UUID findCurrentUser();
+     List<VehicleResponseDto> getAllVehiclesOfUser();
      UserResponseDto findByEmail(String email);
+     boolean makeAsFavourite(UUID id);
+     List<ServiceCenterResponseDto> listOfFavourites();
 }

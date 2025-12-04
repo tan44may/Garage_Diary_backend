@@ -1,9 +1,6 @@
 package com.garagediary.garagediary.Controller;
 
-import com.garagediary.garagediary.dto.AvailabilityRequest;
-import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
-import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
-import com.garagediary.garagediary.dto.UserResponseDto;
+import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.service.ServiceCenterService;
 
 import com.garagediary.garagediary.service.UserService;
@@ -88,5 +85,11 @@ public class ServiceCenterController {
     public ResponseEntity<Double> updateAverageRating(@PathVariable UUID serviceCenterId) {
         Double updatedRating = serviceCenterService.updateAverageRating(serviceCenterId);
         return ResponseEntity.ok(updatedRating);
+    }
+
+    @PutMapping("/plan/{id}")
+    public ResponseEntity<ServiceCenterResponseDto> updatePlan(@PathVariable UUID id,@RequestBody Plan dto)
+    {
+        return ResponseEntity.ok(serviceCenterService.updatePlan(id,dto.getPlan()));
     }
 }

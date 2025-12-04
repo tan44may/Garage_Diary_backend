@@ -61,5 +61,8 @@ public class ServiceCenter {
 
     private List<String> documents;
 
+    private int totalServices;
+    private int totalBookings;
+
     private String plan;
 }
