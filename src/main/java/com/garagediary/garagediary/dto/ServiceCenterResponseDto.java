@@ -1,8 +1,7 @@
 package com.garagediary.garagediary.dto;
 
 import com.garagediary.garagediary.entity.enums.ActivePlan;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,6 +10,10 @@ import java.util.UUID;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ServiceCenterResponseDto {
 
     private UUID id;
@@ -40,4 +43,5 @@ public class ServiceCenterResponseDto {
 
     private int totalServices;
     private int totalBookings;
+    private String plan;
 }

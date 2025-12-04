@@ -1,13 +1,12 @@
 package com.garagediary.garagediary.Controller;
 
-import com.garagediary.garagediary.dto.UserRequestDto;
-import com.garagediary.garagediary.dto.UserResponseDto;
-import com.garagediary.garagediary.dto.VehicleRequestDto;
+import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -52,6 +51,24 @@ public class UserController {
     ResponseEntity<UserResponseDto> removeVehicle(@PathVariable UUID id)
     {
         return new ResponseEntity<>(userService.removeVehicle(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/me/all-vehicles")
+    public ResponseEntity<List<VehicleResponseDto>> getAllVehicles()
+    {
+        return ResponseEntity.ok(userService.getAllVehiclesOfUser());
+    }
+
+    @PostMapping("/make-favourite/{id}")
+    public ResponseEntity<Boolean> makeFavourite(@PathVariable UUID id )
+    {
+        return ResponseEntity.ok(userService.makeAsFavourite(id));
+    }
+
+    @GetMapping("/list-favourite")
+    public ResponseEntity<List<ServiceCenterResponseDto>> listOfFavourite()
+    {
+        return ResponseEntity.ok(userService.listOfFavourites());
     }
 }
 

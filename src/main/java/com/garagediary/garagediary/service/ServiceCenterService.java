@@ -25,4 +25,6 @@ public interface ServiceCenterService {
     Double updateAverageRating(UUID serviceCenterId);
 
     ServiceCenterResponseDto updateAvailability(AvailabilityRequest request,UUID id);
+
+    ServiceCenterResponseDto updatePlan(UUID id,String planName );
 }

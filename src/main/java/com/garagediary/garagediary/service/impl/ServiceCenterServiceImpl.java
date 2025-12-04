@@ -1,16 +1,14 @@
 package com.garagediary.garagediary.service.impl;
 
+import com.garagediary.garagediary.Repository.ServiceCenterRepository;
 import com.garagediary.garagediary.Repository.UserRepository;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.Repository.ServiceCenterRepository;
 import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.service.ServiceCenterService;
-
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -106,12 +104,22 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     }
 
     @Override
-    public ServiceCenterResponseDto updateAvailability(AvailabilityRequest request,UUID id) {
-        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Service center not found"));
+    public ServiceCenterResponseDto updateAvailability(AvailabilityRequest request, UUID id) {
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found"));
         center.setAvailableDays(request.getAvailableDays());
         center.setEndTime(request.getEndTime());
         center.setStartTime(request.getStartTime());
         center = serviceCenterRepository.save(center);
+        return mapEntityToResponse(center);
+    }
+
+    @Override
+    public ServiceCenterResponseDto updatePlan(UUID id, String planName) {
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found"));
+
+        center.setPlan(planName);
+        center = serviceCenterRepository.save(center);
+
         return mapEntityToResponse(center);
     }
 
@@ -146,6 +154,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .planStartedDate(sc.getPlanStartedDate())
                 .planEndDate(sc.getPlanEndDate())
                 .availableDays(sc.getAvailableDays())
+                .plan(sc.getPlan())
                 .documents(sc.getDocuments())
                 .startTime(sc.getStartTime())
                 .endTime(sc.getEndTime())
