@@ -20,4 +20,5 @@ public interface UserService {
      UserResponseDto findByEmail(String email);
      boolean makeAsFavourite(UUID id);
      List<ServiceCenterResponseDto> listOfFavourites();
+     UserResponseDto updateImage(String image);
 }
