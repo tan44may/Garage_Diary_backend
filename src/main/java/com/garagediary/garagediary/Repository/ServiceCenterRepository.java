@@ -8,9 +8,7 @@ import java.util.UUID;
 
 public interface ServiceCenterRepository extends JpaRepository<ServiceCenter, UUID> {
 
-    // Find all service centers owned by a specific owner
     List<ServiceCenter> findByOwnerId(UUID ownerId);
 
-    // Search by name (case insensitive)
     List<ServiceCenter> findByGarageNameContainingIgnoreCase(String keyword);
 }
