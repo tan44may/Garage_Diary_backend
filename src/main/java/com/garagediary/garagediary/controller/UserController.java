@@ -18,6 +18,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PutMapping("/update/image")
+    public ResponseEntity<UserResponseDto> updateImage(@RequestBody ImageDto dto)
+    {
+        return ResponseEntity.ok(userService.updateImage(dto.getImage()));
+    }
+
     @GetMapping("/{id}")
     ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id)
     {

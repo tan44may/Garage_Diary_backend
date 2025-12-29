@@ -39,6 +39,7 @@ public class UserEntity {
     @JsonManagedReference
     private List<Vehicle> vehicles;
 
+    private String image;
     
     @ElementCollection
     @CollectionTable(name = "user_favourites", joinColumns = @JoinColumn(name = "user_id"))

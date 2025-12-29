@@ -158,12 +158,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean makeAsFavourite(UUID id) {
-        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Service Center not found"));
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service Center not found"));
 
         UUID userId = findCurrentUser();
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
         List<UUID> favouriteList = user.getFavourites();
-        if (favouriteList==null)
+        if (favouriteList == null)
             favouriteList = new ArrayList<>();
 
         favouriteList.add(center.getId());
@@ -189,6 +189,17 @@ public class UserServiceImpl implements UserService {
         return centres.stream()
                 .map(this::convertServiceCenterToResponseDto)
                 .toList();
+    }
+
+    @Override
+    public UserResponseDto updateImage(String image) {
+
+        UUID id = findCurrentUser();
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setImage(image);
+        user =userRepository.save(user);
+        return convertToResponse(user);
     }
 
 
@@ -232,6 +243,7 @@ public class UserServiceImpl implements UserService {
                 .role(newUser.getRole())
                 .email(newUser.getEmail())
                 .name(newUser.getName())
+                .image(newUser.getImage())
                 .vehicles(vehicleDtos)
                 .bookings(bookingDtos)
                 .build();

@@ -1,14 +1,18 @@
 package com.garagediary.garagediary.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.service.ServiceCenterService;
-
 import com.garagediary.garagediary.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,14 +24,26 @@ public class ServiceCenterController {
     private final ServiceCenterService serviceCenterService;
     private final UserService userService;
 
-    // ----------------- CREATE -----------------
-    @PostMapping
-    public ResponseEntity<ServiceCenterResponseDto> createServiceCenter(
-            @RequestBody ServiceCenterRequestDto dto) {
+    @Autowired
+    private ObjectMapper mapper;
 
-        ServiceCenterResponseDto response = serviceCenterService.createServiceCenter(dto);
-        return ResponseEntity.ok(response);
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ServiceCenterResponseDto> createServiceCenter(
+            @RequestPart("serviceCenterRequestDto") String dtoJson,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage
+    ) throws IOException {
+
+//        ObjectMapper mapper = new ObjectMapper();
+        ServiceCenterRequestDto serviceCenterRequestDto =
+                mapper.readValue(dtoJson, ServiceCenterRequestDto.class);
+
+        return ResponseEntity.ok(
+                serviceCenterService.createServiceCenter(serviceCenterRequestDto, profileImage, coverImage)
+        );
     }
+
 
     // ----------------- UPDATE -----------------
     @PutMapping("/{id}")
@@ -70,16 +86,15 @@ public class ServiceCenterController {
     }
 
     @GetMapping("/email/{email}")
-    ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email)
-    {
+    ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email) {
         return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<ServiceCenterResponseDto> updateAvailability(@PathVariable UUID id, @RequestBody AvailabilityRequest request)
-    {
-        return ResponseEntity.ok(serviceCenterService.updateAvailability(request,id));
+    public ResponseEntity<ServiceCenterResponseDto> updateAvailability(@PathVariable UUID id, @RequestBody AvailabilityRequest request) {
+        return ResponseEntity.ok(serviceCenterService.updateAvailability(request, id));
     }
+
     // ----------------- UPDATE AVERAGE RATING -----------------
     @PutMapping("/rating/{serviceCenterId}")
     public ResponseEntity<Double> updateAverageRating(@PathVariable UUID serviceCenterId) {
@@ -88,8 +103,7 @@ public class ServiceCenterController {
     }
 
     @PutMapping("/plan/{id}")
-    public ResponseEntity<ServiceCenterResponseDto> updatePlan(@PathVariable UUID id,@RequestBody Plan dto)
-    {
-        return ResponseEntity.ok(serviceCenterService.updatePlan(id,dto.getPlan()));
+    public ResponseEntity<ServiceCenterResponseDto> updatePlan(@PathVariable UUID id, @RequestBody Plan dto) {
+        return ResponseEntity.ok(serviceCenterService.updatePlan(id, dto.getPlan()));
     }
 }

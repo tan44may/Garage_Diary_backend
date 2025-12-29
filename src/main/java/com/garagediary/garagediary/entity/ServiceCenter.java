@@ -12,7 +12,9 @@ import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.entity.Booking;
 
 @Entity
-@Data
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceCenter {
