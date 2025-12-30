@@ -6,9 +6,12 @@ import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.entity.UserEntity;
 import com.garagediary.garagediary.service.ServiceCenterService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
@@ -171,6 +172,28 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         center = serviceCenterRepository.save(center);
 
         return mapEntityToResponse(center);
+    }
+
+    @Override
+    public Page<ServiceCenterResponseDto> searchNearbyGarages(
+            double userLat,
+            double userLng,
+            double radiusInKm,
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return serviceCenterRepository
+                .findNearbyServiceCenters(userLat, userLng, radiusInKm, pageable)
+                .map(this::mapEntityToResponse);
     }
 
     // -------------------------------------------------------------------
