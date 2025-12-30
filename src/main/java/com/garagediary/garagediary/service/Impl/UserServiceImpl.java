@@ -17,7 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,7 +37,30 @@ public class UserServiceImpl implements UserService {
     private final AppUserDetailsService appUserDetailsService;
     private final ServiceCenterRepository serviceCenterRepository;
     private final JwtUtils jwtUtils;
-    private final ModelMapper modelMapper;
+//    private final ModelMapper modelMapper;
+
+    private static final String FILE_DIRECTORY =
+            System.getProperty("user.dir") + File.separator + "uploads" + File.separator + "serviceCenterImages";
+    private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of("jpg", "jpeg", "png");
+
+    private String saveFile(MultipartFile file) throws IOException {
+        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        if (fileExtension == null || !ALLOWED_FILE_EXTENSIONS.contains(fileExtension.toLowerCase())) {
+            throw new IOException("Invalid file type.");
+        }
+
+        String uniqueFilename = UUID.randomUUID() + "." + fileExtension;
+
+        File directory = new File(FILE_DIRECTORY);
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Could not create directory: " + FILE_DIRECTORY);
+        }
+
+        File serverFile = new File(directory, uniqueFilename);
+        file.transferTo(serverFile);
+
+        return uniqueFilename;
+    }
 
     @Override
     public RegisterResponseDto addUser(UserRequestDto requestDto) {
@@ -61,13 +87,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto updateUser(UUID id, UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(UUID id, UserRequestDto dto, MultipartFile image) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
-        user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPhone(userRequestDto.getPhone());
+        if (dto.getName() != null)
+            user.setName(dto.getName());
+
+        if (dto.getPhone() != null)
+            user.setPhone(dto.getPhone());
+
+        if (dto.getEmail() != null)
+            user.setEmail(dto.getEmail());
+
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                String savedFileName = saveFile(image);
+                user.setImage("/uploads/serviceCenterImages/" + savedFileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Image upload failed");
+            }
+        }
 
         UserEntity updatedUser = userRepository.save(user);
 

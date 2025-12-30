@@ -6,6 +6,7 @@ import com.garagediary.garagediary.service.ServiceCenterService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,28 @@ public class ServiceCenterController {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @GetMapping("/nearby/current-user")
+    public Page<ServiceCenterResponseDto> getNearbyServiceCentersForUser(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam(defaultValue = "10") double radius,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "averageRating") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        return serviceCenterService.searchNearbyGarages(
+                latitude,
+                longitude,
+                radius,
+                page,
+                size,
+                sortBy,
+                direction
+        );
+    }
+
 
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

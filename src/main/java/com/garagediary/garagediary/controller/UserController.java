@@ -3,8 +3,10 @@ package com.garagediary.garagediary.Controller;
 import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,11 +38,16 @@ public class UserController {
         return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable UUID id, @RequestBody UserRequestDto userRequestDto) {
 
-        return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
-    }
+@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public ResponseEntity<UserResponseDto> updateUser(
+        @PathVariable UUID id,
+        @ModelAttribute UserRequestDto userRequestDto,
+        @RequestPart(value = "image", required = false) MultipartFile image
+) {
+    return ResponseEntity.ok(userService.updateUser(id, userRequestDto, image));
+}
+
     @DeleteMapping("/{id}")
     ResponseEntity<UserResponseDto> deleteUserById(@PathVariable UUID id)
     {

@@ -2,6 +2,7 @@ package com.garagediary.garagediary.service;
 
 import com.garagediary.garagediary.dto.*;
 import com.garagediary.garagediary.entity.Vehicle;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,7 @@ public interface UserService {
      RegisterResponseDto addUser(UserRequestDto requestDto);
      BookingResponseDto getBookingById(UUID bookingId);
      UserResponseDto getUserById(UUID userId);
-     UserResponseDto updateUser(UUID id, UserRequestDto userRequestDto);
+     UserResponseDto updateUser(UUID id, UserRequestDto userRequestDto, MultipartFile image);
      UserResponseDto removeUser(UUID userId);
      UserResponseDto addNewVehicle(VehicleRequestDto vehicleRequestDto);
      UserResponseDto removeVehicle(UUID vehicleId);

@@ -4,6 +4,7 @@ import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import org.springframework.boot.availability.AvailabilityState;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,4 +30,6 @@ public interface ServiceCenterService {
     ServiceCenterResponseDto updateAvailability(AvailabilityRequest request,UUID id);
 
     ServiceCenterResponseDto updatePlan(UUID id,String planName );
+
+    Page<ServiceCenterResponseDto> searchNearbyGarages(double userLat, double userLng, double radiusInKm, int page, int size, String sortBy, String direction);
 }
