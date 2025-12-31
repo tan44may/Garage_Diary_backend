@@ -243,7 +243,6 @@ public class UserServiceImpl implements UserService {
         return convertToResponse(user);
     }
 
-
     private UserEntity convertToEntity(UserRequestDto requestDto) {
         return UserEntity.builder()
                 .phone(requestDto.getPhone())
