@@ -1,11 +1,13 @@
 package com.garagediary.garagediary.service.impl;
 
 import com.garagediary.garagediary.Repository.ServiceCenterRepository;
+import com.garagediary.garagediary.Repository.ServiceOfferedRepository;
 import com.garagediary.garagediary.Repository.UserRepository;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
+import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.service.ServiceCenterService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +31,7 @@ import java.io.File;
 public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     private final ServiceCenterRepository serviceCenterRepository;
-    private final UserRepository userRepository;
+    private final ServiceOfferedRepository serviceOfferedRepository;
 
     private static final String FILE_DIRECTORY =
             System.getProperty("user.dir") + File.separator + "uploads" + File.separator + "serviceCenterImages";
@@ -175,6 +177,27 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     }
 
     @Override
+    public ServiceCenterResponseDto addService(UUID serviceCenterId, ServiceOffered service) {
+        ServiceCenter center = serviceCenterRepository.findById(serviceCenterId)
+                .orElseThrow(() -> new RuntimeException("ServiceCenter not found"));
+
+//        service.setServiceCenter(center);
+        service = serviceOfferedRepository.save(service);
+        center.getServices().add(service);
+
+        center = serviceCenterRepository.save(center);
+        return mapEntityToResponse(center);
+    }
+
+    @Override
+    public List<ServiceOffered> getOfferedServices(UUID serviceCenterId) {
+        ServiceCenter center = serviceCenterRepository.findById(serviceCenterId)
+                .orElseThrow(() -> new RuntimeException("ServiceCenter not found"));
+
+        return center.getServices();
+    }
+
+    @Override
     public Page<ServiceCenterResponseDto> searchNearbyGarages(
             double userLat,
             double userLng,
@@ -227,6 +250,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .planStartedDate(sc.getPlanStartedDate())
                 .planEndDate(sc.getPlanEndDate())
                 .availableDays(sc.getAvailableDays())
+                .services(sc.getServices())
                 .plan(sc.getPlan())
                 .documents(sc.getDocuments())
                 .startTime(sc.getStartTime())

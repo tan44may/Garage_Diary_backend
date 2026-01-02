@@ -1,5 +1,6 @@
 package com.garagediary.garagediary.dto;
 
+import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.entity.enums.ActivePlan;
 import lombok.*;
 
@@ -33,6 +34,7 @@ public class ServiceCenterResponseDto {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    private List<ServiceOffered> services;
     private float averageRating;
 
     private String profileUrl;

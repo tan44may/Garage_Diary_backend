@@ -46,6 +46,4 @@ public class UserEntity {
     @Column(name = "service_center_id")
     private List<UUID> favourites;
 
-
-
 }
