@@ -2,6 +2,7 @@ package com.garagediary.garagediary.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garagediary.garagediary.dto.*;
+import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.service.ServiceCenterService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +83,17 @@ public class ServiceCenterController {
     @PutMapping("update/{id}")
     public ResponseEntity<ServiceCenterResponseDto> updateAvailability(@PathVariable UUID id, @RequestBody AvailabilityRequest request) {
         return ResponseEntity.ok(serviceCenterService.updateAvailability(request, id));
+    }
+
+    @PostMapping("/add-services/{id}")
+    public ResponseEntity<ServiceCenterResponseDto> addService(@PathVariable UUID id, @RequestBody ServiceOffered serviceOffered) {
+
+        return ResponseEntity.ok(serviceCenterService.addService(id, serviceOffered));
+    }
+
+    @GetMapping("/get-services/{id}")
+    public ResponseEntity<List<ServiceOffered>> getServices(@PathVariable UUID id) {
+        return ResponseEntity.ok(serviceCenterService.getOfferedServices(id));
     }
 
     @PutMapping("/rating/{serviceCenterId}")

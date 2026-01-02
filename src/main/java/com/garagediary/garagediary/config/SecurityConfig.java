@@ -30,22 +30,28 @@ public class SecurityConfig {
     private final AppUserDetailsService userDetailsService;
     private  final JwtFilter jwtFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register","/api/user/email/**").permitAll()
-                        .requestMatchers("/api/user/**").hasAnyRole("CUSTOMER", "ADMIN")
-                        .requestMatchers("/api/service-center/**").hasAnyRole("GARAGE_OWNER", "ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.cors(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/login", "/api/register", "/api/user/email/**").permitAll()
 
-        return  http.build();
+                    .requestMatchers("/api/user/**")
+                    .hasAnyRole("CUSTOMER", "ADMIN")
 
-    }
+                    .requestMatchers("/api/service-center/**")
+                    .hasAnyRole("GARAGE_OWNER", "ADMIN")
+
+                    .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+}
+
 
 
 

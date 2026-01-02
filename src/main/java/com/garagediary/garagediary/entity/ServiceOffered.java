@@ -19,12 +19,8 @@ public class ServiceOffered {
     private String description;
 
     // MANY SERVICES CAN BELONG TO ONE SERVICE CENTER
-    @ManyToOne
-    @JoinColumn(name = "service_center_id", nullable = false)
-    private ServiceCenter serviceCenter;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "service_center_id", nullable = false)
+//    private ServiceCenter serviceCenter;
 
-    // MANY SERVICES CAN BE CREATED BY ONE USER
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
 }

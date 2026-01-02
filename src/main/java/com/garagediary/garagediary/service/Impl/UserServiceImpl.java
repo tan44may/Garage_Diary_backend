@@ -12,7 +12,6 @@ import com.garagediary.garagediary.service.AuthenticationService;
 import com.garagediary.garagediary.service.UserService;
 import com.garagediary.garagediary.util.JwtUtils;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -14,7 +14,6 @@ import com.garagediary.garagediary.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -104,7 +103,6 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 
-
     @Override
     public BookingResponseDto getBookingDetails(UUID bookingId) {
 
@@ -135,12 +133,9 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> list = user.getBookings();
 
         List<BookingResponseDto> bList = list.stream()
-                .map(this::convertToResponse)  // use your custom converter to avoid recursion
+                .map(this::convertToResponse)
                 .toList();
-
         return bList;
     }
-
-
 
 }
