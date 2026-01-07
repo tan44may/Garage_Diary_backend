@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface ServiceCenterService {
 
-    ServiceCenterResponseDto createServiceCenter(ServiceCenterRequestDto dto, MultipartFile profileImage, MultipartFile coverImage) throws IOException;
+    ServiceCenterResponseDto createServiceCenter(ServiceCenterRequestDto dto, MultipartFile adharCard, MultipartFile panCard,MultipartFile shopact) throws IOException;
 
     ServiceCenterResponseDto updateServiceCenter(UUID id, ServiceCenterRequestDto dto);
 

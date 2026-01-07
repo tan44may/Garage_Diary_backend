@@ -32,15 +32,16 @@ public class ServiceCenterController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ServiceCenterResponseDto> createServiceCenter(
             @RequestPart("serviceCenterRequestDto") String dtoJson,
-            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage,
-            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage
+            @RequestPart(value = "adharCard", required = false) MultipartFile adharCard,
+            @RequestPart(value = "panCard", required = false) MultipartFile panCard,
+            @RequestPart(value = "shopact", required = false) MultipartFile shopact
     ) throws IOException {
 
         ServiceCenterRequestDto serviceCenterRequestDto =
                 mapper.readValue(dtoJson, ServiceCenterRequestDto.class);
 
         return ResponseEntity.ok(
-                serviceCenterService.createServiceCenter(serviceCenterRequestDto, profileImage, coverImage)
+                serviceCenterService.createServiceCenter(serviceCenterRequestDto, adharCard, panCard,shopact)
         );
     }
 
