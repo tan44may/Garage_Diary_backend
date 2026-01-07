@@ -37,12 +37,12 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedback.setComment(dto.getComment());
 
         ServiceCenter serviceCenter = serviceCenterRepository.findById(dto.getServiceCenterId())
-                .orElseThrow(() -> new NoSuchElementException("Service center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + dto.getServiceCenterId()));
         feedback.setServiceCenter(serviceCenter);
 
         UUID id = userService.findCurrentUser();
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+id));
         feedback.setCustomer(user);
 
         feedback = feedbackRepository.save(feedback);
@@ -68,7 +68,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<FeedbackResponseDto> getFeedbacksForServiceCenter(UUID serviceCenterId) {
         ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new NoSuchElementException("Service center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
         List<Feedback> feedbacks = feedbackRepository.findByServiceCenter(serviceCenter);
 
@@ -80,7 +80,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public List<FeedbackResponseDto> getFeedbacksByUser(UUID userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+userId));
 
         List<Feedback> feedbacks = feedbackRepository.findByCustomer(user);
 
@@ -92,7 +92,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public double calculateAverageRating(UUID serviceCenterId) {
         ServiceCenter serviceCenter = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new NoSuchElementException("Service center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
         Double avg = feedbackRepository.findAverageRatingByServiceCenter(serviceCenter);
         return avg != null ? avg : 0.0;

@@ -12,7 +12,6 @@ import com.garagediary.garagediary.entity.enums.Status;
 import com.garagediary.garagediary.service.BookingService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ServiceCenterRepository serviceCenterRepository;
     private final BookingRepository bookingRepository;
-    private  ModelMapper modelMapper;
 
     @Override
     public BookingResponseDto createBooking(BookingRequestDto bookingRequestDto) {
@@ -34,7 +32,7 @@ public class BookingServiceImpl implements BookingService {
         Booking newBooking = new Booking();
         newBooking.setStatus(Status.PENDING);
         UUID id = userService.findCurrentUser();
-        UserEntity customer = userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
+        UserEntity customer = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+id));
         ServiceCenter center = serviceCenterRepository.findById(bookingRequestDto.getServiceCenter_id()).orElseThrow(()-> new NoSuchElementException("Service center not found"));
         newBooking.setCustomer(customer);
         newBooking.setName(bookingRequestDto.getName());
@@ -51,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
         }
         if(currentVehicle == null)
         {
-            throw  new NoSuchElementException("Vehicle not fount with given vehicle id ");
+            throw new NoSuchElementException("Unable to find vehicle with id :"+bookingRequestDto.getVehicle_id());
         }
         newBooking.setVehicle(currentVehicle);
         newBooking.setMobile_number(bookingRequestDto.getMobile_number());
@@ -106,13 +104,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDto getBookingDetails(UUID bookingId) {
 
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         return convertToResponse(booking);
     }
 
     @Override
     public BookingResponseDto updateBookingStatus(UUID bookingId,Status status) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         booking.setStatus(status);
         booking = bookingRepository.save(booking);
         return convertToResponse(booking);
@@ -120,7 +118,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDto cancelBooking(UUID bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id "));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         booking.setStatus(Status.CANCELLED);
         booking = bookingRepository.save(booking);
         return convertToResponse(booking);
@@ -129,7 +127,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingResponseDto> getAllBookingsByUser(UUID userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+userId));
         List<Booking> list = user.getBookings();
 
         List<BookingResponseDto> bList = list.stream()

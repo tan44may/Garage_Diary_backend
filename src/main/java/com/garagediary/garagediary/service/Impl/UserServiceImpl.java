@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserById(UUID userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Unable to find user "));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+userId));
         return convertToResponse(user);
     }
 
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto addNewVehicle(VehicleRequestDto vehicleRequestDto) {
         UUID id = findCurrentUser();
-        UserEntity currentUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        UserEntity currentUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
         Vehicle newVehicle = Vehicle.builder()
                 .vehicle_number(vehicleRequestDto.getVehicle_number())
@@ -153,10 +153,10 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto removeVehicle(UUID vehicleId) {
 
         UUID currentUserId = findCurrentUser();
-        UserEntity currentUser = userRepository.findById(currentUserId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        UserEntity currentUser = userRepository.findById(currentUserId).orElseThrow(() -> new NoSuchElementException("User not found with id: " + currentUserId));
 
         List<Vehicle> list = currentUser.getVehicles();
-        Vehicle deletedVehicle = vehicleRepository.findById(vehicleId).orElseThrow(() -> new NoSuchElementException("Vehicle not found"));
+        Vehicle deletedVehicle = vehicleRepository.findById(vehicleId).orElseThrow(() -> new NoSuchElementException("Vehicle not found with id: " + vehicleId));
         boolean removed = list.removeIf(v -> v.getVehicle_id().equals(vehicleId));
 
         if (!removed) {
@@ -176,14 +176,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UUID findCurrentUser() {
         String loggedInUserEmail = authenticationService.getAuthentication().getName();
-        UserEntity user = userRepository.findByEmail(loggedInUserEmail).orElseThrow(() -> new UsernameNotFoundException("User name not found"));
+        UserEntity user = userRepository.findByEmail(loggedInUserEmail).orElseThrow(() -> new NoSuchElementException("User not found"));
         return user.getUser_id();
     }
 
     @Override
     public List<VehicleResponseDto> getAllVehiclesOfUser() {
         UUID id = findCurrentUser();
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
         return user.getVehicles().stream()
                 .map(this::convertVehicleToDto)
@@ -224,7 +224,7 @@ public class UserServiceImpl implements UserService {
             return List.of();
         }
 
-        List<ServiceCenter> centres = serviceCenterRepository.findAllById(favouriteIds);  // uses JPA findAllById.[web:27]
+        List<ServiceCenter> centres = serviceCenterRepository.findAllById(favouriteIds);
 
         return centres.stream()
                 .map(this::convertServiceCenterToResponseDto)

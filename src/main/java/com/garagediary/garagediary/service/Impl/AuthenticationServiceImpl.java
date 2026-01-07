@@ -37,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final UserDetails userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
         final String jwtToken = jwtUtils.generateToken(userDetails);
         UserEntity user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("Unable to find user with email :"+request.getEmail()));
         return new LoginResponseDto(
                 user.getUser_id(),
                 user.getName(),

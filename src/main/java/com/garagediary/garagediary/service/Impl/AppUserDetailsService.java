@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class AppUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         UserEntity user = repository.findByEmail(email).orElseThrow(
-                ()-> new UsernameNotFoundException("User name not found")
+                () -> new NoSuchElementException("Unable to find user with email :"+email)
         );
         Role role = user.getRole(); // enum: CUSTOMER, ADMIN, GARAGE_OWNER, TALK_TEAM
 
