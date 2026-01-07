@@ -94,7 +94,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     public ServiceCenterResponseDto updateServiceCenter(UUID id, ServiceCenterRequestDto dto) {
 
         ServiceCenter sc = serviceCenterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service Center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + id));
 
         mapDtoToEntity(dto, sc);
 
@@ -107,7 +107,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     public String deleteServiceCenter(UUID id) {
 
         if (!serviceCenterRepository.existsById(id)) {
-            throw new RuntimeException("Service Center not found");
+            throw new NoSuchElementException("Service center not found with id :" + id);
         }
 
         serviceCenterRepository.deleteById(id);
@@ -119,7 +119,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     public ServiceCenterResponseDto getServiceCenterById(UUID id) {
 
         ServiceCenter sc = serviceCenterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service Center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + id));
 
         return mapEntityToResponse(sc);
     }
@@ -149,7 +149,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     public Double updateAverageRating(UUID serviceCenterId) {
 
         ServiceCenter sc = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("Service Center not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
         // Agar tumne feedback system add kiya hoga to yaha average calculate hoga
         // Filhal calculate nahi kar rahe, direct return kar dete:
@@ -158,7 +158,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     @Override
     public ServiceCenterResponseDto updateAvailability(AvailabilityRequest request, UUID id) {
-        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found"));
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + id));
         center.setAvailableDays(request.getAvailableDays());
         center.setEndTime(request.getEndTime());
         center.setStartTime(request.getStartTime());
@@ -168,7 +168,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
 
     @Override
     public ServiceCenterResponseDto updatePlan(UUID id, String planName) {
-        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found"));
+        ServiceCenter center = serviceCenterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + id));
 
         center.setPlan(planName);
         center = serviceCenterRepository.save(center);
@@ -179,7 +179,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     @Override
     public ServiceCenterResponseDto addService(UUID serviceCenterId, ServiceOffered service) {
         ServiceCenter center = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("ServiceCenter not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
 //        service.setServiceCenter(center);
         service = serviceOfferedRepository.save(service);
@@ -192,7 +192,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     @Override
     public List<ServiceOffered> getOfferedServices(UUID serviceCenterId) {
         ServiceCenter center = serviceCenterRepository.findById(serviceCenterId)
-                .orElseThrow(() -> new RuntimeException("ServiceCenter not found"));
+                .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
         return center.getServices();
     }
