@@ -42,6 +42,9 @@ public class ServiceCenterResponseDto {
     private List<String> gallery;
     private List<String> socialMedia;
     private List<String> documents;
+    private String panCard;
+    private String adharCard;
+    private String shopact;
 
     private int totalServices;
     private int totalBookings;

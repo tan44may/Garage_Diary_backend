@@ -26,46 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-//    @Override
-//    protected void doFilterInternal(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            FilterChain filterChain)
-//            throws ServletException, IOException {
-//
-//        String authHeader = request.getHeader("Authorization");
-//
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            String token = authHeader.substring(7);
-//
-//            try {
-//                String email = jwtUtils.extractUsername(token);
-//
-//                if (email != null &&
-//                        SecurityContextHolder.getContext().getAuthentication() == null) {
-//
-//                    UserDetails userDetails =
-//                            userDetailsService.loadUserByUsername(email);
-//
-//                    if (jwtUtils.validateToken(token, userDetails)) {
-//                        UsernamePasswordAuthenticationToken auth =
-//                                new UsernamePasswordAuthenticationToken(
-//                                        userDetails,
-//                                        null,
-//                                        userDetails.getAuthorities());
-//
-//                        SecurityContextHolder.getContext().setAuthentication(auth);
-//                    }
-//                }
-//            } catch (Exception e) {
-//                log.info("Error "+e);
-//                response.setStatus(HttpStatus.BAD_REQUEST.value());
-//                response.getWriter().write("Error :"+e);
-//            }
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
+
 @Override
 protected void doFilterInternal(
         HttpServletRequest request,

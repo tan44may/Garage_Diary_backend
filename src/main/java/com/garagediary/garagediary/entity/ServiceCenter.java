@@ -53,7 +53,11 @@ public class ServiceCenter {
 
     
     private String profileUrl;         
-    private String coverImgUrl;        
+    private String coverImgUrl;
+    private String panCard;
+    private String adharCard;
+    private String shopact;
+
 
     @ElementCollection
     private List<String> gallery;      

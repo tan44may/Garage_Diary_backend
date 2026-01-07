@@ -57,7 +57,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     }
 
     @Override
-    public ServiceCenterResponseDto createServiceCenter(ServiceCenterRequestDto dto, MultipartFile profileImage, MultipartFile coverImage) throws IOException {
+    public ServiceCenterResponseDto createServiceCenter(ServiceCenterRequestDto dto, MultipartFile adharCard, MultipartFile panCard, MultipartFile shopact) throws IOException {
         ServiceCenter serviceCenter = new ServiceCenter();
         serviceCenter.setGarageName(dto.getGarageName());
         serviceCenter.setLatitude(dto.getLatitude());
@@ -68,20 +68,25 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         serviceCenter.setEndTime(dto.getEndTime());
         serviceCenter.setGallery(dto.getGallery());
         serviceCenter.setSocialMedia(dto.getSocialMedia());
-        serviceCenter.setDocuments(dto.getDocuments());
+//        serviceCenter.setDocuments(dto.getDocuments());
 
         // Use URLs if passed as Strings
-        serviceCenter.setProfileUrl(dto.getProfileUrl());
-        serviceCenter.setCoverImgUrl(dto.getCoverImgUrl());
+//        serviceCenter.setProfileUrl(dto.getProfileUrl());
+//        serviceCenter.setCoverImgUrl(dto.getCoverImgUrl());
 
         // Save images if uploaded as files
-        if (profileImage != null && !profileImage.isEmpty()) {
-            String profileImageUrl = saveFile(profileImage);
-            serviceCenter.setProfileUrl("/" + FILE_DIRECTORY + "/" + profileImageUrl);
+        if (adharCard != null && !adharCard.isEmpty()) {
+            String adharCardUrl = saveFile(adharCard);
+            serviceCenter.setAdharCard("/" + FILE_DIRECTORY + "/" + adharCardUrl);
         }
-        if (coverImage != null && !coverImage.isEmpty()) {
-            String coverImageUrl = saveFile(coverImage);
-            serviceCenter.setCoverImgUrl("/" + FILE_DIRECTORY + "/" + coverImageUrl);
+        if (panCard != null && !panCard.isEmpty()) {
+            String panCardUrl = saveFile(panCard);
+            serviceCenter.setPanCard("/" + FILE_DIRECTORY + "/" + panCardUrl);
+        }
+
+        if (shopact != null && !shopact.isEmpty()) {
+            String shopactUrl = saveFile(shopact);
+            serviceCenter.setShopact("/" + FILE_DIRECTORY + "/" + shopactUrl);
         }
 
         // Save to database
@@ -258,6 +263,9 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .averageRating(sc.getAverageRating())
                 .profileUrl(sc.getProfileUrl())
                 .coverImgUrl(sc.getCoverImgUrl())
+                .adharCard(sc.getAdharCard())
+                .panCard(sc.getPanCard())
+                .shopact(sc.getShopact())
                 .gallery(sc.getGallery())
                 .socialMedia(sc.getSocialMedia())
                 .totalServices(sc.getServices() != null ? sc.getServices().size() : 0)
