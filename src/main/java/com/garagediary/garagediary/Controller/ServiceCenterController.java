@@ -2,8 +2,12 @@ package com.garagediary.garagediary.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garagediary.garagediary.dto.*;
+import com.garagediary.garagediary.entity.GarageSubscription;
 import com.garagediary.garagediary.entity.ServiceOffered;
+import com.garagediary.garagediary.entity.SubscriptionPlan;
+import com.garagediary.garagediary.service.GarageSubscriptionService;
 import com.garagediary.garagediary.service.ServiceCenterService;
+import com.garagediary.garagediary.service.SubscriptionPlanService;
 import com.garagediary.garagediary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,41 @@ public class ServiceCenterController {
 
     @Autowired
     private ObjectMapper mapper;
+
+    private final GarageSubscriptionService service;
+    private final SubscriptionPlanService planService;
+
+
+
+    @PostMapping("/subscription/{garageId}/{planId}")
+    public ResponseEntity<GarageSubscription> subscribe(
+            @PathVariable UUID garageId,
+            @PathVariable UUID planId) {
+
+        return ResponseEntity.ok(
+                service.subscribeGarage(garageId, planId)
+        );
+    }
+
+    @GetMapping("/subscription/getPlans")
+    public ResponseEntity<List<SubscriptionPlan>> getPlans() {
+        return ResponseEntity.ok(planService.getActivePlans());
+    }
+
+    @GetMapping("/subscription/{garageId}")
+    public ResponseEntity<GarageSubscription> getActive(
+            @PathVariable UUID garageId) {
+
+        return ResponseEntity.ok(
+                service.getActiveSubscription(garageId)
+        );
+    }
+
+    @GetMapping("/get/{email}")
+    public ResponseEntity<ServiceCenterResponseDto> getServiceCenterByEmail(@PathVariable String email)
+    {
+        return new ResponseEntity<>(serviceCenterService.getServiceCenterByEmail(email),HttpStatus.OK);
+    }
 
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

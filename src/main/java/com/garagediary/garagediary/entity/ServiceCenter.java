@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-import com.garagediary.garagediary.entity.ServiceOffered;
-import com.garagediary.garagediary.entity.Booking;
 
 @Entity
 @Builder
@@ -23,10 +21,12 @@ public class ServiceCenter {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true)
     private String garageName;
     private double latitude;
     private double longitude;
     private String phone;
+    private String email;
 
     private UUID ownerId;
 
@@ -51,7 +51,6 @@ public class ServiceCenter {
 
     private float averageRating;
 
-    
     private String profileUrl;         
     private String coverImgUrl;
     private String panCard;
