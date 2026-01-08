@@ -36,6 +36,7 @@ public class ServiceCenterResponseDto {
 
     private List<ServiceOffered> services;
     private float averageRating;
+    private String email;
 
     private String profileUrl;
     private String coverImgUrl;

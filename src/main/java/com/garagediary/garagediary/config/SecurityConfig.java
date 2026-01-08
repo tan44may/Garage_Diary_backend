@@ -35,7 +35,12 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     http.cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+
                     .requestMatchers("/api/login", "/api/register", "/api/user/email/**").permitAll()
+
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
 
                     .requestMatchers("/api/user/**")
                     .hasAnyRole("CUSTOMER", "ADMIN")
@@ -51,9 +56,6 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
     return http.build();
 }
-
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder()

@@ -63,6 +63,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
         serviceCenter.setLatitude(dto.getLatitude());
         serviceCenter.setLongitude(dto.getLongitude());
         serviceCenter.setPhone(dto.getPhone());
+        serviceCenter.setEmail(dto.getEmail());
         serviceCenter.setAvailableDays(dto.getAvailableDays());
         serviceCenter.setStartTime(dto.getStartTime());
         serviceCenter.setEndTime(dto.getEndTime());
@@ -224,6 +225,16 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .map(this::mapEntityToResponse);
     }
 
+    @Override
+    public ServiceCenterResponseDto getServiceCenterByEmail(String email) {
+
+        ServiceCenter center = serviceCenterRepository.findByEmail(email).orElseThrow(
+                ()-> new NoSuchElementException("Service center not found with email :"+email)
+        );
+
+        return mapEntityToResponse(center);
+    }
+
     // -------------------------------------------------------------------
     //                     HELPER MAPPING METHODS
     // -------------------------------------------------------------------
@@ -257,6 +268,7 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
                 .availableDays(sc.getAvailableDays())
                 .services(sc.getServices())
                 .plan(sc.getPlan())
+                .email(sc.getEmail())
                 .documents(sc.getDocuments())
                 .startTime(sc.getStartTime())
                 .endTime(sc.getEndTime())
