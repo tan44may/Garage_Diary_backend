@@ -24,19 +24,19 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookingResponseDto> getBookingDetails(@PathVariable UUID id)
+    public ResponseEntity<BookingResponseDto> getBookingDetails(@PathVariable Long id)
     {
         return ResponseEntity.ok(bookingService.getBookingDetails(id));
     }
 
     @PutMapping("update-status/{id}")
-    public ResponseEntity<BookingResponseDto> updateBookingStatus(@PathVariable UUID id , @RequestBody UpdateStatusRequest request)
+    public ResponseEntity<BookingResponseDto> updateBookingStatus(@PathVariable Long id , @RequestBody UpdateStatusRequest request)
     {
         return ResponseEntity.ok(bookingService.updateBookingStatus(id,request.getStatus()));
     }
 
     @PutMapping("cancel/{id}")
-    public ResponseEntity<BookingResponseDto> cancelBooking(@PathVariable UUID id )
+    public ResponseEntity<BookingResponseDto> cancelBooking(@PathVariable Long id )
     {
         return ResponseEntity.ok(bookingService.cancelBooking(id));
     }

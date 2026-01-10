@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Booking {
     @Id
     @GeneratedValue
-    private UUID booking_id;
+    private Long booking_id;
  
     @Enumerated(EnumType.STRING)
     private Status status;
