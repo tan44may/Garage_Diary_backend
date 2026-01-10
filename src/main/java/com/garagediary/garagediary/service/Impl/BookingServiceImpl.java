@@ -102,14 +102,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDto getBookingDetails(UUID bookingId) {
+    public BookingResponseDto getBookingDetails(Long bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         return convertToResponse(booking);
     }
 
     @Override
-    public BookingResponseDto updateBookingStatus(UUID bookingId,Status status) {
+    public BookingResponseDto updateBookingStatus(Long bookingId,Status status) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         booking.setStatus(status);
         booking = bookingRepository.save(booking);
@@ -117,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDto cancelBooking(UUID bookingId) {
+    public BookingResponseDto cancelBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
         booking.setStatus(Status.CANCELLED);
         booking = bookingRepository.save(booking);

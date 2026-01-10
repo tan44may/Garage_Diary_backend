@@ -1,10 +1,6 @@
 package com.garagediary.garagediary.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.garagediary.garagediary.entity.Bill;
-import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.entity.UserEntity;
-import com.garagediary.garagediary.entity.Vehicle;
 import com.garagediary.garagediary.entity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponseDto {
-        private UUID booking_id;
+        private Long booking_id;
         private Status status;
         @JsonIgnore
         private UserDto customer;
