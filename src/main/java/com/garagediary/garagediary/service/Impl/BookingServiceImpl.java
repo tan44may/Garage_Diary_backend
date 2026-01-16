@@ -1,139 +1,110 @@
 package com.garagediary.garagediary.service.impl;
 
-import com.garagediary.garagediary.Repository.BookingRepository;
-import com.garagediary.garagediary.Repository.ServiceCenterRepository;
-import com.garagediary.garagediary.Repository.UserRepository;
+import com.garagediary.garagediary.Repository.*;
 import com.garagediary.garagediary.dto.*;
-import com.garagediary.garagediary.entity.Booking;
-import com.garagediary.garagediary.entity.ServiceCenter;
-import com.garagediary.garagediary.entity.UserEntity;
-import com.garagediary.garagediary.entity.Vehicle;
+import com.garagediary.garagediary.entity.*;
 import com.garagediary.garagediary.entity.enums.Status;
 import com.garagediary.garagediary.service.BookingService;
 import com.garagediary.garagediary.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class BookingServiceImpl implements BookingService {
+
+    private final BookingRepository bookingRepository;
+    private final ServiceCenterRepository serviceCenterRepository;
+    private final ServiceOfferedRepository serviceOfferedRepository;
+    private final VehicleRepository vehicleRepository;
     private final UserService userService;
     private final UserRepository userRepository;
-    private final ServiceCenterRepository serviceCenterRepository;
-    private final BookingRepository bookingRepository;
 
     @Override
-    public BookingResponseDto createBooking(BookingRequestDto bookingRequestDto) {
+    public BookingResponseDto createBooking(BookingRequestDto dto) {
 
-        Booking newBooking = new Booking();
-        newBooking.setStatus(Status.PENDING);
+        ServiceCenter serviceCenter = serviceCenterRepository.findById(dto.getServiceCenterId())
+                .orElseThrow(() -> new NoSuchElementException("Service Center not found"));
+
+        ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceId())
+                .orElseThrow(() -> new NoSuchElementException("Service not found"));
+
+        Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId())
+                .orElseThrow(() -> new NoSuchElementException("Vehicle not found"));
+
         UUID id = userService.findCurrentUser();
-        UserEntity customer = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+id));
-        ServiceCenter center = serviceCenterRepository.findById(bookingRequestDto.getServiceCenter_id()).orElseThrow(()-> new NoSuchElementException("Service center not found"));
-        newBooking.setCustomer(customer);
-        newBooking.setName(bookingRequestDto.getName());
-        newBooking.setServiceCenter(center);
-        List<Vehicle> vehicleList = customer.getVehicles();
-        Vehicle currentVehicle = null;
-        for(Vehicle v : vehicleList)
-        {
-            if(v.getVehicle_id().toString().equals(bookingRequestDto.getVehicle_id()))
-            {
-                currentVehicle= v;
-                break;
-            }
-        }
-        if(currentVehicle == null)
-        {
-            throw new NoSuchElementException("Unable to find vehicle with id :"+bookingRequestDto.getVehicle_id());
-        }
-        newBooking.setVehicle(currentVehicle);
-        newBooking.setMobile_number(bookingRequestDto.getMobile_number());
-        newBooking = bookingRepository.save(newBooking);
-        List<Booking> list =  customer.getBookings();
+        UserEntity customer = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
 
-        if(list == null)
-        {
-            list= new ArrayList<>();
-        }
-        list.add(newBooking);
-        customer.setBookings(list);
-        userRepository.save(customer);
+        Booking booking = new Booking();
+        booking.setCustomer(customer);
+        booking.setServiceCenter(serviceCenter);
+        booking.setService(service);
+        booking.setVehicle(vehicle);
 
-        List<Booking> serviceList = center.getBookings();
+        booking.setBookingDate(dto.getBookingDate());
+        booking.setBookingTime(dto.getBookingTime());
 
-        if(serviceList == null)
-        {
-            serviceList= new ArrayList<>();
-        }
-        serviceList.add(newBooking);
-        center.setBookings(serviceList);
-        serviceCenterRepository.save(center);
+        booking.setMobileNumber(dto.getMobileNumber());
+        booking.setCustomerName(dto.getCustomerName());
 
-        return convertToResponse(newBooking);
+        booking.setStatus(Status.PENDING);
+
+        Booking saved = bookingRepository.save(booking);
+        return mapToDto(saved);
     }
 
-    private BookingResponseDto convertToResponse(Booking booking) {
+    @Override
+    public List<BookingResponseDto> getBookingsByServiceCenter(UUID serviceCenterId) {
+        return bookingRepository.findByServiceCenterId(serviceCenterId)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookingResponseDto> getBookingsByStatus(UUID serviceCenterId, Status status) {
+        return bookingRepository.findByServiceCenterIdAndStatus(serviceCenterId, status)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Override
+    public BookingResponseDto updateBookingStatus(Long bookingId, Status status) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NoSuchElementException("Booking not found"));
+
+        booking.setStatus(status);
+        return mapToDto(bookingRepository.save(booking));
+    }
+
+    @Override
+    public void cancelBooking(Long bookingId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NoSuchElementException("Booking not found"));
+
+        booking.setStatus(Status.CANCELLED);
+        bookingRepository.save(booking);
+    }
+
+    /* -------- MAPPER -------- */
+    private BookingResponseDto mapToDto(Booking booking) {
         return BookingResponseDto.builder()
-                .booking_id(booking.getBooking_id())
+                .bookingId(booking.getBookingId())
                 .status(booking.getStatus())
-                .mobile_number(booking.getMobile_number())
-                .name(booking.getName())
-                .customer(UserDto.builder()
-                        .user_id(booking.getCustomer().getUser_id())
-                        .email(booking.getCustomer().getEmail())
-                        .name(booking.getCustomer().getName())
-                        .build())
-                .serviceCenter(ServiceCenterDto.builder()
-                        .id(booking.getServiceCenter().getId())
-                        .garageName(booking.getServiceCenter().getGarageName())
-                        .phone(booking.getServiceCenter().getPhone())
-                        .build())
-                .vehicle(VehicleDto.builder()
-                        .vehicle_id(booking.getVehicle().getVehicle_id())
-                        .vehicle_number(booking.getVehicle().getVehicle_number())
-                        .brand(booking.getVehicle().getBrand())
-                        .build())
+                .customerName(booking.getCustomerName())
+                .serviceName(booking.getService().getServiceName())
+                .bookingDate(booking.getBookingDate())
+                .bookingTime(booking.getBookingTime())
+                .mobileNumber(booking.getMobileNumber())
                 .build();
     }
-
-    @Override
-    public BookingResponseDto getBookingDetails(Long bookingId) {
-
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
-        return convertToResponse(booking);
-    }
-
-    @Override
-    public BookingResponseDto updateBookingStatus(Long bookingId,Status status) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
-        booking.setStatus(status);
-        booking = bookingRepository.save(booking);
-        return convertToResponse(booking);
-    }
-
-    @Override
-    public BookingResponseDto cancelBooking(Long bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("No booking found with given id :" + bookingId));
-        booking.setStatus(Status.CANCELLED);
-        booking = bookingRepository.save(booking);
-        return convertToResponse(booking);
-    }
-
-    @Override
-    public List<BookingResponseDto> getAllBookingsByUser(UUID userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Unable to find user with id :"+userId));
-        List<Booking> list = user.getBookings();
-
-        List<BookingResponseDto> bList = list.stream()
-                .map(this::convertToResponse)
-                .toList();
-        return bList;
-    }
-
 }

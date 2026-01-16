@@ -296,13 +296,13 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return BookingResponseDto.builder()
-                .booking_id(booking.getBooking_id())
+                .bookingId(booking.getBookingId())
                 .status(booking.getStatus())
-                .customer(customerDto)
-                .serviceCenter(convertServiceCenterToDto(booking.getServiceCenter()))
-                .vehicle(convertVehicleToDTO(booking.getVehicle()))
-                .mobile_number(booking.getMobile_number())
-                .name(booking.getName())
+                .customerName(customerDto.getName())
+                .serviceName(convertServiceCenterToDto(booking.getServiceCenter()).getGarageName())
+                .mobileNumber(booking.getMobileNumber())
+                .bookingDate(booking.getBookingDate())
+                .bookingTime(booking.getBookingTime())
                 .build();
     }
 

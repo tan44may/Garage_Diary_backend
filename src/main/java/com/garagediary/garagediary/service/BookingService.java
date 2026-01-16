@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookingService {
-     BookingResponseDto createBooking(BookingRequestDto bookingRequestDto);
-     BookingResponseDto getBookingDetails(Long bookingId);
-     BookingResponseDto updateBookingStatus(Long bookingId, Status status);
-     BookingResponseDto cancelBooking(Long bookingId);
-     List<BookingResponseDto> getAllBookingsByUser(UUID userId);
 
+     BookingResponseDto createBooking(BookingRequestDto dto);
+
+     List<BookingResponseDto> getBookingsByServiceCenter(UUID serviceCenterId);
+
+     List<BookingResponseDto> getBookingsByStatus(UUID serviceCenterId, Status status);
+
+     BookingResponseDto updateBookingStatus(Long bookingId, Status status);
+
+     void cancelBooking(Long bookingId);
 }
+
