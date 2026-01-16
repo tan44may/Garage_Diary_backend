@@ -48,6 +48,9 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .requestMatchers("/api/service-center/**")
                     .hasAnyRole("GARAGE_OWNER", "ADMIN")
 
+                    .requestMatchers("/api/bookings/**")
+                    .hasAnyRole("CUSTOMER","GARAGE_OWNER")
+
                     .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

@@ -3,49 +3,51 @@ package com.garagediary.garagediary.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.garagediary.garagediary.entity.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
-
 @Entity
-@Setter
 @Getter
+@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Booking {
-    @Id
-    @GeneratedValue
-    private Long booking_id;
- 
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
-    @ManyToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bookingId;
+
+    /* -------- STATUS -------- */
+    @Enumerated(EnumType.STRING)
+    private Status status; // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+
+    /* -------- RELATIONS -------- */
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonBackReference
     private UserEntity customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_center_id", nullable = false)
     private ServiceCenter serviceCenter;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id", nullable = false)
+    private ServiceOffered service;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id")
-    @JsonBackReference
     private Vehicle vehicle;
 
-    private String brand;
+    /* -------- BOOKING DETAILS -------- */
+    private LocalDate bookingDate;
+    private LocalTime bookingTime;
 
-    private String fuel;
+    private String mobileNumber;
+    private String customerName;
 
-    private String mobile_number;
-
-    private String name;
-
-//    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-//    private Bill bill;
 
 }

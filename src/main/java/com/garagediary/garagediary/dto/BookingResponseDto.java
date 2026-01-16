@@ -7,18 +7,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponseDto {
-        private Long booking_id;
+
+        private Long bookingId;
         private Status status;
-        @JsonIgnore
-        private UserDto customer;
-        private ServiceCenterDto serviceCenter;
-        private VehicleDto vehicle;
-        private String mobile_number;
-        private String name;
+
+        private String customerName;
+        private String serviceName;
+
+        private LocalDate bookingDate;
+        private LocalTime bookingTime;
+
+        private String mobileNumber;
 }
