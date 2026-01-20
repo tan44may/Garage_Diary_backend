@@ -16,9 +16,6 @@ public class BookingRequestDto {
         private UUID serviceId;
         private UUID vehicleId;
 
-        private LocalDate bookingDate;
-        private LocalTime bookingTime;
-
         private String mobileNumber;
         private String customerName;
 }

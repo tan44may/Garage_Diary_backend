@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,8 +50,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setService(service);
         booking.setVehicle(vehicle);
 
-        booking.setBookingDate(dto.getBookingDate());
-        booking.setBookingTime(dto.getBookingTime());
+        booking.setBookingDate(LocalDate.now());
+        booking.setBookingTime(LocalTime.now());
 
         booking.setMobileNumber(dto.getMobileNumber());
         booking.setCustomerName(dto.getCustomerName());

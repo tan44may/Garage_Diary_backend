@@ -2,11 +2,9 @@ package com.garagediary.garagediary.Controller;
 
 import com.garagediary.garagediary.dto.BookingRequestDto;
 import com.garagediary.garagediary.dto.BookingResponseDto;
-import com.garagediary.garagediary.dto.UpdateStatusRequest;
 import com.garagediary.garagediary.entity.enums.Status;
 import com.garagediary.garagediary.service.BookingService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,7 +16,6 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-
     @PostMapping
     public ResponseEntity<BookingResponseDto> createBooking(
             @RequestBody BookingRequestDto dto
@@ -26,7 +23,6 @@ public class BookingController {
 
         return ResponseEntity.ok(bookingService.createBooking(dto));
     }
-
 
     @GetMapping("/service-center/{serviceCenterId}")
     public ResponseEntity<List<BookingResponseDto>> getBookingsByServiceCenter(
