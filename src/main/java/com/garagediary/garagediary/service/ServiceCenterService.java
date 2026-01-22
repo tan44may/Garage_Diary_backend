@@ -3,6 +3,7 @@ package com.garagediary.garagediary.service;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
+import com.garagediary.garagediary.dto.ServiceOfferedDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
 import com.garagediary.garagediary.entity.ServiceOffered;
 import org.springframework.boot.availability.AvailabilityState;
@@ -36,7 +37,7 @@ public interface ServiceCenterService {
 
     ServiceCenterResponseDto addService(UUID serviceCenterId, ServiceOffered service);
 
-    List<ServiceOffered> getOfferedServices(UUID serviceCenterId);
+    List<ServiceOfferedDto> getOfferedServices(UUID serviceCenterId);
 
     Page<ServiceCenterResponseDto> searchNearbyGarages(double userLat, double userLng, double radiusInKm, int page, int size, String sortBy, String direction);
 

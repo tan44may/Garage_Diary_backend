@@ -132,7 +132,7 @@ public class ServiceCenterController {
     }
 
     @GetMapping("/get-services/{id}")
-    public ResponseEntity<List<ServiceOffered>> getServices(@PathVariable UUID id) {
+    public ResponseEntity<List<ServiceOfferedDto>> getServices(@PathVariable UUID id) {
         return ResponseEntity.ok(serviceCenterService.getOfferedServices(id));
     }
 

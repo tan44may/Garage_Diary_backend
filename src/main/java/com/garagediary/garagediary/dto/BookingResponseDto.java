@@ -20,6 +20,7 @@ public class BookingResponseDto {
         private Status status;
 
         private String customerName;
+        private String serviceCenterName;
         private String serviceName;
 
         private LocalDate bookingDate;

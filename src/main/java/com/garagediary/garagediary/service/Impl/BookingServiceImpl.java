@@ -7,10 +7,8 @@ import com.garagediary.garagediary.entity.enums.Status;
 import com.garagediary.garagediary.service.BookingService;
 import com.garagediary.garagediary.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -59,6 +57,24 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(Status.PENDING);
 
         Booking saved = bookingRepository.save(booking);
+        List<Booking> list = serviceCenter.getBookings();
+        if(list.isEmpty())
+        {
+            list = new ArrayList<>();
+        }
+        list.add(saved);
+        serviceCenter.setBookings(list);
+        serviceCenterRepository.save(serviceCenter);
+
+        List<Booking> custList = customer.getBookings();
+        if(custList.isEmpty())
+        {
+            custList = new ArrayList<>();
+        }
+        custList.add(saved);
+        customer.setBookings(custList);
+        userRepository.save(customer);
+
         return mapToDto(saved);
     }
 
@@ -98,12 +114,12 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(booking);
     }
 
-    /* -------- MAPPER -------- */
     private BookingResponseDto mapToDto(Booking booking) {
         return BookingResponseDto.builder()
                 .bookingId(booking.getBookingId())
                 .status(booking.getStatus())
                 .customerName(booking.getCustomerName())
+                .serviceCenterName(booking.getServiceCenter().getGarageName())
                 .serviceName(booking.getService().getServiceName())
                 .bookingDate(booking.getBookingDate())
                 .bookingTime(booking.getBookingTime())

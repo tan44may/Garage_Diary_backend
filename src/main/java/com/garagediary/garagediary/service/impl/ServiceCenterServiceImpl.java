@@ -6,6 +6,7 @@ import com.garagediary.garagediary.Repository.UserRepository;
 import com.garagediary.garagediary.dto.AvailabilityRequest;
 import com.garagediary.garagediary.dto.ServiceCenterRequestDto;
 import com.garagediary.garagediary.dto.ServiceCenterResponseDto;
+import com.garagediary.garagediary.dto.ServiceOfferedDto;
 import com.garagediary.garagediary.entity.ServiceCenter;
 import com.garagediary.garagediary.entity.ServiceOffered;
 import com.garagediary.garagediary.service.ServiceCenterService;
@@ -196,11 +197,24 @@ public class ServiceCenterServiceImpl implements ServiceCenterService {
     }
 
     @Override
-    public List<ServiceOffered> getOfferedServices(UUID serviceCenterId) {
+    public List<ServiceOfferedDto> getOfferedServices(UUID serviceCenterId) {
         ServiceCenter center = serviceCenterRepository.findById(serviceCenterId)
                 .orElseThrow(() -> new NoSuchElementException("Service center not found with id :" + serviceCenterId));
 
-        return center.getServices();
+        return center.getServices()
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    private  ServiceOfferedDto convertToDto(ServiceOffered offered)
+    {
+        return ServiceOfferedDto.builder()
+                .id(offered.getId())
+                .serviceName(offered.getServiceName())
+                .price(offered.getPrice())
+                .description(offered.getDescription())
+                .build();
     }
 
     @Override
