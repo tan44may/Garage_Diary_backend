@@ -1,11 +1,13 @@
 package com.garagediary.garagediary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.UUID;
 
 @Entity
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ServiceOffered {
 
     @Id
@@ -17,10 +19,5 @@ public class ServiceOffered {
     private double price;
 
     private String description;
-
-    // MANY SERVICES CAN BELONG TO ONE SERVICE CENTER
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "service_center_id", nullable = false)
-//    private ServiceCenter serviceCenter;
 
 }
