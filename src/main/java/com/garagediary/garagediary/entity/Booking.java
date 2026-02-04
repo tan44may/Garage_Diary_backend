@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Booking {
