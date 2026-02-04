@@ -62,6 +62,7 @@ public class BookingServiceImpl implements BookingService {
         {
             list = new ArrayList<>();
         }
+
         list.add(saved);
         serviceCenter.setBookings(list);
         serviceCenterRepository.save(serviceCenter);
@@ -127,3 +128,4 @@ public class BookingServiceImpl implements BookingService {
                 .build();
     }
 }
+
