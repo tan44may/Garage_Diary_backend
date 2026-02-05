@@ -17,7 +17,6 @@ public class BillController {
 
     private final BillService billService;
 
-
     @PostMapping("/generate/{bookingId}")
     public ResponseEntity<BillResponseDto> generateBill(
             @PathVariable long bookingId) {
